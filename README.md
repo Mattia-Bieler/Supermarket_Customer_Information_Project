@@ -16,11 +16,11 @@ The ad_data table was created to store advertisement-related information, and co
 
 ## Dashboard: Design and Development
 [__VIEW DASHBOARD ON TABLEAU PUBLIC__](https://public.tableau.com/app/profile/mattia.bieler/viz/2MarketSupermarketDashboard/2MarketInformation1)
-![Image](https://github.com/user-attachments/assets/74c44831-41eb-4f97-b02e-86499e30500e)
+![Image](https://github.com/user-attachments/assets/19a33af7-4f9d-49fa-826e-ca871fd96bc8)
 
 The Tableau dashboard consists of two pages, 2Market Information (1) and 2Market Information (2), which can be toggled using the blue navigation button in the top left corner. On 2Market Information (1), there are three dynamic tables and two scatterplots. Users can switch between country, education, and marital status on the tables using the category parameter. Furthermore, each table presents different aspects of these categories: age and income, household size, and spending. The top scatterplot examines the relationship between age and income, while the bottom scatterplot visualises average spending versus customer registration date, with data point sizes reflecting the customer count.
 
-![Image](https://github.com/user-attachments/assets/ace3bcb0-4f2a-41d5-8fbf-99392f1810fb)
+![Image](https://github.com/user-attachments/assets/af6c7da7-0a8d-4f1e-9074-91d2113ed55d)
 
 On 2Market Information (2), there is a table displaying customer behaviour metrics, including average web visits, average complaints, and other relevant data. Furthermore, two stacked bar charts are included: one analysing advertisement effectiveness percentages and the other showing product breakdown spend, which can be viewed as either average or total spend, depending on the selection made using the spend parameter. Legends are included on the page for the stacked bar charts, offering clear explanations of what each colour represents. Advertisement effectiveness percentages are categorised by type: social media platforms (Facebook, Instagram, and Twitter) are represented in varying shades of purple, while non-social media methods (brochure and bulkmail) are depicted in different shades of green. All graphs on this page, like the tables on 2Market Information (1), can be dynamically adjusted using the category parameter.
 
