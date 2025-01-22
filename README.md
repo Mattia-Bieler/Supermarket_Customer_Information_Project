@@ -15,7 +15,7 @@ An age column was added, calculated as 2025 - year_birth, to simplify demographi
 The ad_data table was created to store advertisement-related information, and consistency checks between the marketing_data and ad_data tables were performed. I first verified that no duplicate id’s or NULL values existed in the ad_data dataset. Mismatched id entries in ad_data that did not exist in marketing_data were then identified and removed, ensuring alignment and maintaining data integrity for analysis. Both tables were then exported as ad_data_cleaned.csv and marketing_data_cleaned.csv. 
 
 ## Dashboard: Design and Development
-[__VIEW DASHBOARD ON TABLEAU PUBLIC__](https://public.tableau.com/app/profile/mattia.bieler/viz/2MarketDashboard_17375677046300/2MarketInformation1)
+[__VIEW DASHBOARD ON TABLEAU PUBLIC__](https://public.tableau.com/app/profile/mattia.bieler/viz/2MarketSupermarketDashboard/2MarketInformation1)
 ![Image](https://github.com/user-attachments/assets/74c44831-41eb-4f97-b02e-86499e30500e)
 
 The Tableau dashboard consists of two pages, 2Market Information (1) and 2Market Information (2), which can be toggled using the blue navigation button in the top left corner. On 2Market Information (1), there are three dynamic tables and two scatterplots. Users can switch between country, education, and marital status on the tables using the category parameter. Furthermore, each table presents different aspects of these categories: age and income, household size, and spending. The top scatterplot examines the relationship between age and income, while the bottom scatterplot visualises average spending versus customer registration date, with data point sizes reflecting the customer count.
