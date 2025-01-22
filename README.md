@@ -1,4 +1,4 @@
-# Supermarket Customer Information Project
+# Supermarket Customer Information Project (UPDATE IN PROGRESS)
 ## Project Background
 2Market has requested an analysis of its new customer base, specifically focusing on individuals who registered between 2022 Q3 and 2024 Q2. This initiative serves as an initial step toward addressing the supermarket's challenge of gaining a deeper understanding of its customer demographics and purchasing behaviour, a challenge that has arisen from the lack of emphasis on fostering a data-driven decision-making culture within 2Market. The analysis will provide an overview of the customer demographics, explore the effectiveness of various advertisement channels, examine the supermarket’s best-selling products, and produce recommendations for further analysis.
 
