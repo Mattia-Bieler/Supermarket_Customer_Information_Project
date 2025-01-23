@@ -37,6 +37,8 @@ Focusing on the country category, Australia has the highest average age (56.42),
 
 Montenegro’s high average number of teens (0.67) contrasts with the absence of children at home, possibly reflecting younger child-rearing norms. Germany, with the lowest number of teens (0.45) and second lowest number of kids (0.38), has smaller households and a lower birth rate. 
 
+![Country - Spending](https://github.com/user-attachments/assets/8a4470e9-4392-4465-9480-20ea9d624eb6)
+
 Spain, with the largest customer base (1,092) and the highest total spend ($657,704), ranks sixth in average spend per customer ($602.29). A further analysis is needed to examine Spain's spending patterns, focusing on spending variability and distribution. This would reveal whether the total spend is primarily driven by a small group of high-income individuals or by a more uniform contribution across the customer base. Such insights could guide the development of targeted marketing strategies to better address customer segments and optimise revenue.
 
 As education level increases, both average age and income rise. For example, basic education holders have the lowest average age (46.54) and income ($20,306.26), while PhD holders have the highest (57.85, $56,120.29). Basic education holders also have the highest number of kids (0.63) and the lowest number of teens (0.09), whereas PhD holders have the lowest number of kids (0.4) and the highest number of teens (0.6). These trends suggest that as education and, more significantly, age increase, family composition shifts, particularly regarding the life stage of children.
