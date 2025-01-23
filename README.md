@@ -16,20 +16,20 @@ The ad_data table was created to store advertisement-related information, and co
 
 ## Dashboard: Design and Development
 [__VIEW DASHBOARD ON TABLEAU PUBLIC__](https://public.tableau.com/app/profile/mattia.bieler/viz/2MarketSupermarketDashboard/2MarketInformation1)
-![Image](https://github.com/user-attachments/assets/d84923a8-7b52-41e0-9945-c53506430c77)
+![Dashboard Page One](https://github.com/user-attachments/assets/d84923a8-7b52-41e0-9945-c53506430c77)
 
 The Tableau dashboard consists of two pages, 2Market Information (1) and 2Market Information (2), which can be toggled using the blue navigation button in the top left corner. On 2Market Information (1), there are three dynamic tables and two scatterplots. Users can switch between country, education, and marital status on the tables using the category parameter. Furthermore, each table presents different aspects of these categories: age and income, household size, and spending. The top scatterplot examines the relationship between age and income, while the bottom scatterplot visualises average spending versus customer registration date, with data point sizes reflecting the customer count.
 
-![Image](https://github.com/user-attachments/assets/4ce4c6ab-5bfd-4767-a3f0-dc7b80c60cd8)
+![Dashboard Page Two](https://github.com/user-attachments/assets/4ce4c6ab-5bfd-4767-a3f0-dc7b80c60cd8)
 
 On 2Market Information (2), there is a table displaying customer behaviour metrics, including average web visits, average complaints, and other relevant data. Furthermore, two stacked bar charts are included: one analysing advertisement effectiveness percentages and the other showing product breakdown spend, which can be viewed as either average or total spend, depending on the selection made using the spend parameter. Legends are included on the page for the stacked bar charts, offering clear explanations of what each colour represents. Advertisement effectiveness percentages are categorised by type: social media platforms (Facebook, Instagram, and Twitter) are represented in varying shades of purple, while non-social media methods (brochure and bulkmail) are depicted in different shades of green. All graphs on this page, like the tables on 2Market Information (1), can be dynamically adjusted using the category parameter.
 
 ## Insights and Recommendations
-![Image](https://github.com/user-attachments/assets/a47bcd1b-0523-4073-bebb-60564f7392c7)
+![Spend vs Customer Reg Date](https://github.com/user-attachments/assets/a47bcd1b-0523-4073-bebb-60564f7392c7)
 
 The bottom scatterplot shows a decline in the average spend of newer customers between 2022 Q2 and 2024 Q3, except for 2023 Q4, which shows a higher average spend than 2023 Q3. This trend may indicate that the supermarket is attracting more price-sensitive or budget-conscious shoppers, or that newer customers are spending less at 2Market and potentially increasing their spending at competing supermarkets. A shopping trend analysis, market share analysis, and customer surveys could provide further insights into the decline in average spend by newer customers.
 
-![Image](https://github.com/user-attachments/assets/4fad4e26-4322-407b-a024-a7bc756199da)
+![Age vs Income](https://github.com/user-attachments/assets/4fad4e26-4322-407b-a024-a7bc756199da)
 
 Focusing on the country category, Australia has the highest average age (56.42), while Montenegro has the lowest average age (51.67). Despite having the youngest demographic, Montenegro has the highest average income ($57,680.33). This relationship stands out, as it diverges from the general trend observed in the top scatterplot, where income tends to increase with age. Montenegro also has the highest average spend ($1,040.67), highlighting a link between income and spending. This is further highlighted by India, who has the lowest average income ($49,105.80) and spend ($533.22). However, it is important to note that Montenegro's younger demographic is represented by only three customers in the dataset. This limited sample size may skew the perception of affluence in Montenegro and might not accurately reflect the reality of its broader population.
 
