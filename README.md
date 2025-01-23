@@ -52,6 +52,7 @@ There is little variation in the average number of days since the last purchase 
 The advertisement channels bulkmail, Facebook, Instagram, and Twitter show similar levels of effectiveness, while brochure lags significantly behind. Exceptions include the country Montenegro and individuals with a basic education level, where only bulkmail is effective. Therefore, I recommend a continued focus across all three social media channels and bulkmail. However, a new marketing strategy is needed, as the overall advertisement effectiveness is only at 29.8% and no individual channel reaches an overall effectiveness of 7.5%. If 2Market has historical data on the success of various marketing campaigns, an analysis of this data could provide insights into how to improve advertisement effectiveness.
 
 ![Country - Product Breakdown](https://github.com/user-attachments/assets/45d3cdb8-74ec-414c-bc27-987d302db94f)
+![Product Name Legend](https://github.com/user-attachments/assets/3c7d9408-a6c9-40db-9a93-5a6d79beff60)
 ![MS - Product Breakdown](https://github.com/user-attachments/assets/47ec7af7-7884-49e5-b15f-30b5005c8a5a)
 ![Education - Product Breakdown](https://github.com/user-attachments/assets/433ee595-d598-4f2e-bc47-1ba271f25745)
 
