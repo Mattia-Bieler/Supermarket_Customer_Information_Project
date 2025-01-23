@@ -16,7 +16,7 @@ The ad_data table was created to store advertisement-related information, and co
 
 ## Dashboard: Design and Development
 [__VIEW DASHBOARD ON TABLEAU PUBLIC__](https://public.tableau.com/app/profile/mattia.bieler/viz/2MarketSupermarketDashboard/2MarketInformation1)
-![Image](https://github.com/user-attachments/assets/fd9625cd-a582-458c-83d5-75ce80d38423)
+![Image](https://github.com/user-attachments/assets/d84923a8-7b52-41e0-9945-c53506430c77)
 
 The Tableau dashboard consists of two pages, 2Market Information (1) and 2Market Information (2), which can be toggled using the blue navigation button in the top left corner. On 2Market Information (1), there are three dynamic tables and two scatterplots. Users can switch between country, education, and marital status on the tables using the category parameter. Furthermore, each table presents different aspects of these categories: age and income, household size, and spending. The top scatterplot examines the relationship between age and income, while the bottom scatterplot visualises average spending versus customer registration date, with data point sizes reflecting the customer count.
 
