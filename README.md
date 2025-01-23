@@ -47,7 +47,7 @@ Similar patterns emerge across marital statuses, where age correlates with both 
 
 ![Country - Recency](https://github.com/user-attachments/assets/7be17b83-6dab-4402-934c-34e6edb1a4f7)
 
-There is little variation in the average number of days since the last purchase across different educational levels and marital statuses. However, for the country category, Montenegro stands out with a significantly lower average number of days since the last purchase compared to other countries, which show similar figures.
+There is little variation in the average number of days since the last purchase across different educational levels (between 47.32 and 49.9 days) and marital statuses (between 48.31 and 50.06 days). However, for the country category, Montenegro stands out with a significantly lower average number of days since the last purchase compared to other countries, which show similar figures.
 
 The advertisement channels bulkmail, Facebook, Instagram, and Twitter show similar levels of effectiveness, while brochure lags significantly behind. Exceptions include the country Montenegro and individuals with a basic education level, where only bulkmail is effective. Therefore, I recommend a continued focus across all three social media channels and bulkmail. However, a new marketing strategy is needed, as the overall advertisement effectiveness is only at 29.8% and no individual channel reaches an overall effectiveness of 7.5%. If 2Market has historical data on the success of various marketing campaigns, an analysis of this data could provide insights into how to improve advertisement effectiveness.
 
