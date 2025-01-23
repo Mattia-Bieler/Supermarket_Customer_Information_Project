@@ -29,7 +29,7 @@ On 2Market Information (2), there is a table displaying customer behaviour metri
 
 The bottom scatterplot shows a decline in the average spend of newer customers between 2022 Q2 and 2024 Q3, except for 2023 Q4, which shows a higher average spend than 2023 Q3. This trend may indicate that the supermarket is attracting more price-sensitive or budget-conscious shoppers, or that newer customers are spending less at 2Market and potentially increasing their spending at competing supermarkets. A shopping trend analysis, market share analysis, and customer surveys could provide further insights into the decline in average spend by newer customers.
 
-![Age vs Income](https://github.com/user-attachments/assets/4fad4e26-4322-407b-a024-a7bc756199da)
+![Age vs Income](https://github.com/user-attachments/assets/658c9fe3-5d58-4210-b735-320270121005)
 
 Focusing on the country category, Australia has the highest average age (56.42), while Montenegro has the lowest average age (51.67). Despite having the youngest demographic, Montenegro has the highest average income ($57,680.33). This relationship stands out, as it diverges from the general trend observed in the top scatterplot, where income tends to increase with age. Montenegro also has the highest average spend ($1,040.67), highlighting a link between income and spending. This is further highlighted by India, who has the lowest average income ($49,105.80) and spend ($533.22). However, it is important to note that Montenegro's younger demographic is represented by only three customers in the dataset. This limited sample size may skew the perception of affluence in Montenegro and might not accurately reflect the reality of its broader population.
 
