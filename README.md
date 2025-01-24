@@ -49,15 +49,15 @@ Similar patterns emerge across marital statuses, where age correlates with both 
 
 There is little variation in the average number of days since the last purchase across different educational levels (between 47.32 and 49.9 days) and marital statuses (between 48.31 and 50.06 days). However, for the country category, Montenegro stands out with a significantly lower average number of days since the last purchase compared to other countries, which show similar figures.
 
+![Ad Channel Legend](https://github.com/user-attachments/assets/0264bd0f-a2df-487a-87b8-c01abf5c3559)
 ![Country - Ad](https://github.com/user-attachments/assets/8ae6c509-d62f-4fc8-827c-158c90f131d2)
-![Ad Channel](https://github.com/user-attachments/assets/0264bd0f-a2df-487a-87b8-c01abf5c3559)
 ![Education - Ad](https://github.com/user-attachments/assets/05b8293a-3952-447f-99af-c21fe113e635)
 ![MS -Ad](https://github.com/user-attachments/assets/f2c112e0-6fd6-4dcb-a5d7-d79e426d0d62)
 
 The advertisement channels bulkmail, Facebook, Instagram, and Twitter show similar levels of effectiveness, while brochure lags significantly behind. Exceptions include the country Montenegro and individuals with a basic education level, where only bulkmail is effective. Therefore, I recommend a continued focus across all three social media channels and bulkmail. However, a new marketing strategy is needed, as the overall advertisement effectiveness is only at 29.8% and no individual channel reaches an overall effectiveness of 7.5%. If 2Market has historical data on the success of various marketing campaigns, an analysis of this data could provide insights into how to improve advertisement effectiveness.
 
-![Country - Product Breakdown](https://github.com/user-attachments/assets/45d3cdb8-74ec-414c-bc27-987d302db94f)
 ![Product Name Legend](https://github.com/user-attachments/assets/3c7d9408-a6c9-40db-9a93-5a6d79beff60)
+![Country - Product Breakdown](https://github.com/user-attachments/assets/45d3cdb8-74ec-414c-bc27-987d302db94f)
 ![Education - Product Breakdown](https://github.com/user-attachments/assets/433ee595-d598-4f2e-bc47-1ba271f25745)
 ![MS - Product Breakdown](https://github.com/user-attachments/assets/216abf7a-2791-4907-8f66-b65e740c1aa2)
 
