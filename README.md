@@ -42,7 +42,7 @@ Montenegro’s high average number of teens (0.67) contrasts with the absence of
 
 Spain, with the largest customer base (1,092) and the highest total spend ($657,704), ranks sixth in average spend per customer ($602.29). A further analysis is needed to examine Spain's spending patterns, focusing on spending variability and distribution. This would reveal whether the total spend is primarily driven by a small group of high-income individuals or by a more uniform contribution across the customer base. Such insights could guide the development of targeted marketing strategies to better address customer segments and optimise revenue.
 
-![Education - Tables](https://github.com/user-attachments/assets/e09d70ed-daf9-4659-8e30-a32de48fa776)
+![Education - Tables](https://github.com/user-attachments/assets/40767751-dbdf-4795-84a6-5c4db384f9a0)
 
 As education level increases, both average age and income rise. For example, basic education holders have the lowest average age (46.54) and income ($20,306.26), while PhD holders have the highest (57.85, $56,120.29). Basic education holders also have the highest number of kids (0.63) and the lowest number of teens (0.09), whereas PhD holders have the lowest number of kids (0.4) and the highest number of teens (0.6). These trends suggest that as education and, more significantly, age increase, family composition shifts, particularly regarding the life stage of children.
 
