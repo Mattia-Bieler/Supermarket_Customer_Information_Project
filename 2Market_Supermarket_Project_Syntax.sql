@@ -2,7 +2,7 @@
 -- Used Text to Column twice for Dt_Customer to handle the difference in date formats (DMY and MDY).
 -- Changed the date format to YYYY-MM-DD to import file into pgAdmin4.
 
--- Create the marketing_data table to store customer information.
+-- Create a 'marketing_data' table to store customer information.
 CREATE TABLE marketing_data (
     id SERIAL PRIMARY KEY,
     year_birth INT,
@@ -26,10 +26,9 @@ CREATE TABLE marketing_data (
     response INT,
     complain INT,
     country VARCHAR(50),
-    count_success INT
-);
+    count_success INT);
 
--- View the updated marketing_data table.
+-- View the updated 'marketing_data' table.
 SELECT * FROM marketing_data;
 
 -- Alter column names for clarity.
@@ -53,7 +52,7 @@ ALTER TABLE marketing_data
 ALTER TABLE marketing_data 
     RENAME COLUMN income TO income_$;
 
--- View the updated marketing_data table.
+-- View the updated 'marketing_data' table.
 SELECT * FROM marketing_data;
 
 -- Check for duplicates in the 'id' column.
@@ -62,31 +61,32 @@ FROM marketing_data
 GROUP BY id
 HAVING COUNT(*) > 1;
 
--- Check for NULL values in all columns.
-SELECT
-    COUNT(*) FILTER (WHERE year_birth IS NULL) AS year_birth_nulls,
-    COUNT(*) FILTER (WHERE education IS NULL) AS education_nulls,
-    COUNT(*) FILTER (WHERE marital_status IS NULL) AS marital_status_nulls,
-    COUNT(*) FILTER (WHERE income_$ IS NULL) AS income_nulls,
-    COUNT(*) FILTER (WHERE kidhome IS NULL) AS kidhome_nulls,
-    COUNT(*) FILTER (WHERE teenhome IS NULL) AS teenhome_nulls,
-    COUNT(*) FILTER (WHERE customer_reg IS NULL) AS customer_reg_nulls,
-    COUNT(*) FILTER (WHERE recency IS NULL) AS recency_nulls,
-    COUNT(*) FILTER (WHERE amtalco IS NULL) AS amtalco_nulls,
-    COUNT(*) FILTER (WHERE amtvege IS NULL) AS amtvege_nulls,
-    COUNT(*) FILTER (WHERE amtmeat IS NULL) AS amtmeat_nulls,
-    COUNT(*) FILTER (WHERE amtfish IS NULL) AS amtfish_nulls,
-    COUNT(*) FILTER (WHERE amtchoc IS NULL) AS amtchoc_nulls,
-    COUNT(*) FILTER (WHERE amtcomm IS NULL) AS amtcomm_nulls,
-    COUNT(*) FILTER (WHERE numdeals IS NULL) AS numdeals_nulls,
-    COUNT(*) FILTER (WHERE numwebbuy IS NULL) AS numwebbuy_nulls,
-    COUNT(*) FILTER (WHERE numwalkinbuy IS NULL) AS numwalkinbuy_nulls,
-    COUNT(*) FILTER (WHERE numwebvisits IS NULL) AS numwebvisits_nulls,
-    COUNT(*) FILTER (WHERE response IS NULL) AS response_nulls,
-    COUNT(*) FILTER (WHERE complain IS NULL) AS complain_nulls,
-    COUNT(*) FILTER (WHERE country IS NULL) AS country_nulls,
-    COUNT(*) FILTER (WHERE count_success IS NULL) AS count_success_nulls
-FROM marketing_data;
+-- Create a function to count NULL values for each column in a given table.
+CREATE OR REPLACE FUNCTION nulls_count(target_table TEXT)
+RETURNS TABLE(target_column TEXT, null_count BIGINT) AS
+$$
+DECLARE
+    column_record RECORD;  -- Variable to hold column names from the table.
+    query TEXT;  -- Variable to store dynamically constructed SQL query.
+BEGIN
+    -- Loop through each column in the specified table.
+    FOR column_record IN 
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = target_table
+    LOOP
+        -- Construct SQL query to count NULL values for the current column.
+        query := 'SELECT ' || quote_literal(column_record.column_name) || ', COUNT(*) 
+                  FROM ' || quote_ident(target_table) || 
+                 ' WHERE "' || column_record.column_name || '" IS NULL';
+        -- Execute the constructed query and return the results.
+        RETURN QUERY EXECUTE query;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply the nulls_count function to the 'marketing_data' table.
+SELECT * FROM nulls_count('marketing_data');
 
 -- Show all distinct values in the 'education' column.
 SELECT DISTINCT education
@@ -98,11 +98,11 @@ SELECT DISTINCT marital_status
 FROM marketing_data
 ORDER BY marital_status;
 
--- Remove rows where marital_status is 'YOLO' or 'Absurd'.
+-- Remove rows where marital status is 'YOLO' or 'Absurd'.
 DELETE FROM marketing_data
 WHERE marital_status IN ('YOLO', 'Absurd');
 
--- Change marital_status value 'Alone' to 'Single'.
+-- Change marital status value 'Alone' to 'Single'.
 UPDATE marketing_data
 SET marital_status = 'Single'
 WHERE marital_status = 'Alone';
@@ -131,7 +131,7 @@ SELECT DISTINCT country
 FROM marketing_data
 ORDER BY country;
 
--- Add an 'age' column to the marketing_data table.
+-- Add an 'age' column to the 'marketing_data' table.
 ALTER TABLE marketing_data
     ADD COLUMN age INT;
 
@@ -194,7 +194,7 @@ FROM marketing_data
 ORDER BY age DESC
 LIMIT 10; 
 
--- Delete the outliers from the marketing_data table based on the 'age' column.
+-- Delete the outliers from the 'marketing_data' table based on the 'age' column.
 WITH outliers AS (
     SELECT outlier_value
     FROM find_integer_outliers('marketing_data', 'age')
@@ -219,17 +219,16 @@ WHERE id = 9432;
 
 /********************************************************************************/
 
--- Create a ad_data table to store advertisment information.
+-- Create an 'ad_data' table to store advertisment information.
 CREATE TABLE ad_data (
     id INT PRIMARY KEY,
     bulkmail_ad INT,
     twitter_ad INT,
     instagram_ad INT,
     facebook_ad INT,
-    brochure_ad INT
-);
+    brochure_ad INT);
 
--- View the ad_data table.
+-- View the 'ad_data' table.
 SELECT * FROM ad_data;
 
 -- Check for duplicates.
@@ -237,26 +236,20 @@ SELECT ID, COUNT(*) FROM ad_data
 GROUP BY ID
 HAVING COUNT(*) > 1;
 
--- Check for NULL values.
-SELECT *
-FROM ad_data
-WHERE bulkmail_ad IS NULL
-   OR twitter_ad IS NULL
-   OR instagram_ad IS NULL
-   OR facebook_ad IS NULL
-   OR brochure_ad IS NULL;
+-- Apply the nulls_count function to the 'ad_data' table.
+SELECT * FROM nulls_count('ad_data');
 
--- Find IDs in ad_data that are missing in marketing_data.
+-- Find IDs in ad_data that are missing in the 'marketing_data' table.
 SELECT id, 'missing in marketing_data' AS status
 FROM ad_data 
 WHERE id NOT IN (SELECT id FROM marketing_data)
 UNION ALL
--- Find IDs in marketing_data that are missing in ad_data.
+-- Find IDs in marketing_data that are missing in the 'ad_data' table.
 SELECT id, 'missing in ad_data' AS status
 FROM marketing_data 
 WHERE id NOT IN (SELECT id FROM ad_data);
 
--- Delete IDs from ad_data that are not in marketing_data.
+-- Delete IDs from ad_data that are not in the 'marketing_data' table.
 DELETE FROM ad_data
 WHERE id NOT IN (SELECT id FROM marketing_data);
 
@@ -286,65 +279,23 @@ SELECT country, COUNT(id) AS customer_count,
     ROUND(AVG(amtcomm), 2) AS avg_amtcomm    
 FROM marketing_data 
 GROUP BY country   
-ORDER BY country; 
-
--- Average number of deals, number of web visits, number of web purchases, 
--- and number of walkin purchases per country.
-SELECT country, COUNT(id) AS customer_count,
-       ROUND(AVG(numdeals), 2) AS avg_numdeals,
-       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
-       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
-       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
-FROM marketing_data
-GROUP BY country
 ORDER BY country;
 
--- UPDATE NEEDED: Average responses, complaints, and successful converstions per country.
-SELECT country, COUNT(id) AS customer_count,
-	ROUND(AVG(response), 2) AS avg_response,
-	ROUND(AVG(complain), 3) AS avg_complain,
-	ROUND(AVG(count_success), 2) AS avg_count_success
-FROM marketing_data
-GROUP BY country
-ORDER BY country;
-
--- Average income per country.
-SELECT country, COUNT(id) AS customer_count,
-       ROUND(AVG(income_$), 2) AS average_income
-FROM marketing_data
-GROUP BY country
-ORDER BY average_income DESC;
-
--- Top three incomes per country, ranked overall across all countries.
-WITH ranked_incomes AS (
-    SELECT country, 
-           income_$,
-           ROW_NUMBER() OVER (PARTITION BY country ORDER BY income_$ DESC) AS country_rank,
-           RANK() OVER (ORDER BY income_$ DESC) AS overall_rank
-    FROM marketing_data
-)
-SELECT country, 
-       income_$, 
-       overall_rank
-FROM ranked_incomes
-WHERE country_rank <= 3
-ORDER BY overall_rank;
-
--- Total spend per marital_status.
+-- Total spend per marital status.
 SELECT marital_status, COUNT(id) AS customer_count,
        SUM(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm) AS total_spend
 FROM marketing_data
 GROUP BY marital_status
 ORDER BY total_spend DESC;
 
--- Average spend per marital_status.
+-- Average spend per marital status.
 SELECT marital_status, COUNT(id) AS customer_count,
        ROUND(AVG(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm), 2) AS average_spend
 FROM marketing_data
 GROUP BY marital_status
 ORDER BY average_spend DESC;
 
--- Average spend per product per marital_status.
+-- Average spend per product per marital status.
 SELECT marital_status, COUNT(id) AS customer_count,
     ROUND(AVG(amtalco), 2) AS avg_amtalco,  
     ROUND(AVG(amtvege), 2) AS avg_amtvege,   
@@ -355,48 +306,6 @@ SELECT marital_status, COUNT(id) AS customer_count,
 FROM marketing_data                          
 GROUP BY marital_status                               
 ORDER BY marital_status;
-
--- Average number of deals, number of web visits, number of web purchases, 
--- and number of walk-in purchases per marital_status.
-SELECT marital_status, COUNT(id) AS customer_count,
-       ROUND(AVG(numdeals), 2) AS avg_numdeals,
-       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
-       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
-       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
-FROM marketing_data
-GROUP BY marital_status
-ORDER BY marital_status;
-
--- Average responses, complaints, and successful conversions per marital_status.
-SELECT marital_status, COUNT(id) AS customer_count,
-       ROUND(AVG(response), 2) AS avg_response,
-       ROUND(AVG(complain), 3) AS avg_complain,
-       ROUND(AVG(count_success), 2) AS avg_count_success
-FROM marketing_data
-GROUP BY marital_status
-ORDER BY marital_status;
-
--- Average income per marital_status.
-SELECT marital_status, COUNT(id) AS customer_count,
-       ROUND(AVG(income_$), 2) AS average_income
-FROM marketing_data
-GROUP BY marital_status
-ORDER BY average_income DESC;
-
--- Top three incomes per marital_status, ranked overall across the whole dataset.
-WITH ranked_incomes AS (
-    SELECT marital_status, 
-           income_$,
-           ROW_NUMBER() OVER (PARTITION BY marital_status ORDER BY income_$ DESC) AS marital_status_rank,
-           RANK() OVER (ORDER BY income_$ DESC) AS overall_rank
-    FROM marketing_data
-)
-SELECT marital_status, 
-       income_$, 
-       overall_rank
-FROM ranked_incomes
-WHERE marital_status_rank <= 3
-ORDER BY overall_rank;
 
 -- Total spend per education.
 SELECT education, COUNT(id) AS customer_count,
@@ -424,25 +333,49 @@ FROM marketing_data
 GROUP BY education                               
 ORDER BY education;
 
--- Average number of deals, number of web visits, number of web purchases, 
--- and number of walk-in purchases per education.
-SELECT education, COUNT(id) AS customer_count,
-       ROUND(AVG(numdeals), 2) AS avg_numdeals,
-       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
-       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
-       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
+-- Average income per country.
+SELECT country, COUNT(id) AS customer_count,
+       ROUND(AVG(income_$), 2) AS average_income
 FROM marketing_data
-GROUP BY education
-ORDER BY education;
+GROUP BY country
+ORDER BY average_income DESC;
 
--- Average responses, complaints, and successful conversions per education.
-SELECT education, COUNT(id) AS customer_count,
-       ROUND(AVG(response), 2) AS avg_response,
-       ROUND(AVG(complain), 3) AS avg_complain,
-       ROUND(AVG(count_success), 2) AS avg_count_success
+-- Top three incomes per country, ranked overall across all countries.
+WITH ranked_incomes AS (
+    SELECT country, 
+           income_$,
+           ROW_NUMBER() OVER (PARTITION BY country ORDER BY income_$ DESC) AS country_rank,
+           RANK() OVER (ORDER BY income_$ DESC) AS overall_rank
+    FROM marketing_data
+)
+SELECT country, 
+       income_$, 
+       overall_rank
+FROM ranked_incomes
+WHERE country_rank <= 3
+ORDER BY overall_rank;
+
+-- Average income per marital status.
+SELECT marital_status, COUNT(id) AS customer_count,
+       ROUND(AVG(income_$), 2) AS average_income
 FROM marketing_data
-GROUP BY education
-ORDER BY education;
+GROUP BY marital_status
+ORDER BY average_income DESC;
+
+-- Top three incomes per marital status, ranked overall across the whole dataset.
+WITH ranked_incomes AS (
+    SELECT marital_status, 
+           income_$,
+           ROW_NUMBER() OVER (PARTITION BY marital_status ORDER BY income_$ DESC) AS marital_status_rank,
+           RANK() OVER (ORDER BY income_$ DESC) AS overall_rank
+    FROM marketing_data
+)
+SELECT marital_status, 
+       income_$, 
+       overall_rank
+FROM ranked_incomes
+WHERE marital_status_rank <= 3
+ORDER BY overall_rank;
 
 -- Average income per education level.
 SELECT education, COUNT(id) AS customer_count,
@@ -465,6 +398,66 @@ SELECT education,
 FROM ranked_incomes
 WHERE education_rank <= 3
 ORDER BY overall_rank;
+
+-- Average number of deals, number of web visits, number of web purchases, 
+-- and number of walkin purchases per country.
+SELECT country, COUNT(id) AS customer_count,
+       ROUND(AVG(numdeals), 2) AS avg_numdeals,
+       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
+       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
+       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
+FROM marketing_data
+GROUP BY country
+ORDER BY country;
+
+-- Average responses, complaints, and successful converstions per country.
+SELECT country, COUNT(id) AS customer_count,
+	ROUND(AVG(response), 2) AS avg_response,
+	ROUND(AVG(complain), 3) AS avg_complain,
+	ROUND(AVG(count_success), 2) AS avg_count_success
+FROM marketing_data
+GROUP BY country
+ORDER BY country;
+
+-- Average number of deals, number of web visits, number of web purchases, 
+-- and number of walk-in purchases per marital status.
+SELECT marital_status, COUNT(id) AS customer_count,
+       ROUND(AVG(numdeals), 2) AS avg_numdeals,
+       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
+       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
+       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
+FROM marketing_data
+GROUP BY marital_status
+ORDER BY marital_status;
+
+-- Average responses, complaints, and successful conversions per marital status.
+SELECT marital_status, COUNT(id) AS customer_count,
+       ROUND(AVG(response), 2) AS avg_response,
+       ROUND(AVG(complain), 3) AS avg_complain,
+       ROUND(AVG(count_success), 2) AS avg_count_success
+FROM marketing_data
+GROUP BY marital_status
+ORDER BY marital_status;
+
+-- Average number of deals, number of web visits, number of web purchases, 
+-- and number of walk-in purchases per education.
+SELECT education, COUNT(id) AS customer_count,
+       ROUND(AVG(numdeals), 2) AS avg_numdeals,
+       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
+       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
+       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
+FROM marketing_data
+GROUP BY education
+ORDER BY education;
+
+-- Average responses, complaints, and successful conversions per education.
+SELECT education, COUNT(id) AS customer_count,
+       ROUND(AVG(response), 2) AS avg_response,
+       ROUND(AVG(complain), 3) AS avg_complain,
+       ROUND(AVG(count_success), 2) AS avg_count_success
+FROM marketing_data
+GROUP BY education
+ORDER BY education;
 
 -- Total advertisement effectiveness percentage and the effectiveness percentage for each individual advertisement type.
 SELECT 
@@ -494,7 +487,7 @@ JOIN ad_data ad
 GROUP BY md.country
 ORDER BY total_effectiveness_percentage DESC;
 
--- Advertisement effectiveness percentage per marital_status with total effectiveness percentage.
+-- Advertisement effectiveness percentage per marital status with total effectiveness percentage.
 SELECT md.marital_status, COUNT(md.id) AS customer_count,
     ROUND(
         (SUM(ad.brochure_ad) + SUM(ad.bulkmail_ad) + SUM(ad.facebook_ad) + 
