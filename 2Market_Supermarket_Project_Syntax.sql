@@ -271,8 +271,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY EXECUTE format(
-        'SELECT %I::TEXT AS category, 
-		        COUNT(id) AS customer_count, 
+        'SELECT %I::TEXT AS category, COUNT(id) AS customer_count, 
                 SUM(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm)::NUMERIC AS total_spend 
          FROM marketing_data 
          GROUP BY %I 
@@ -300,8 +299,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY EXECUTE format(
-        'SELECT %I::TEXT AS category, 
-		        COUNT(id) AS customer_count, 
+        'SELECT %I::TEXT AS category, COUNT(id) AS customer_count, 
                 ROUND(AVG(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm)::NUMERIC, 2) AS average_spend 
          FROM marketing_data 
          GROUP BY %I 
@@ -334,8 +332,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY EXECUTE format(
-        'SELECT %I::TEXT AS category, 
-		        COUNT(id) AS customer_count, 
+        'SELECT %I::TEXT AS category, COUNT(id) AS customer_count, 
                 ROUND(AVG(amtalco)::NUMERIC, 2) AS avg_amtalco,  
                 ROUND(AVG(amtvege)::NUMERIC, 2) AS avg_amtvege,   
                 ROUND(AVG(amtmeat)::NUMERIC, 2) AS avg_amtmeat,   
@@ -368,8 +365,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY EXECUTE format(
-        'SELECT %I::TEXT AS category, 
-		        COUNT(id) AS customer_count, 
+        'SELECT %I::TEXT AS category, COUNT(id) AS customer_count, 
                 ROUND(AVG(income_$)::NUMERIC, 2) AS average_income 
          FROM marketing_data 
          GROUP BY %I 
@@ -438,8 +434,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY EXECUTE format(
-        'SELECT %I::TEXT AS category, 
-                COUNT(id) AS customer_count,
+        'SELECT %I::TEXT AS category, COUNT(id) AS customer_count,
                 ROUND(AVG(numdeals), 2) AS avg_numdeals,
                 ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
                 ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
@@ -473,8 +468,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY EXECUTE format(
-        'SELECT %I::TEXT AS category, 
-                COUNT(id) AS customer_count,
+        'SELECT %I::TEXT AS category, COUNT(id) AS customer_count,
                 ROUND(AVG(response), 2) AS avg_response,
                 ROUND(AVG(complain), 3) AS avg_complain,
                 ROUND(AVG(count_success), 2) AS avg_count_success
@@ -520,8 +514,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY EXECUTE format(
-        'SELECT %I::TEXT AS category, 
-                COUNT(md.id) AS customer_count,
+        'SELECT %I::TEXT AS category, COUNT(md.id) AS customer_count,
                 ROUND((SUM(ad.brochure_ad) + SUM(ad.bulkmail_ad) + SUM(ad.facebook_ad) + 
                 SUM(ad.instagram_ad) + SUM(ad.twitter_ad)) * 100.0 / COUNT(md.id), 2) AS total_effectiveness_percentage, 
                 ROUND(SUM(ad.brochure_ad) * 100.0 / COUNT(md.id), 2) AS brochure_effectiveness_percentage,
