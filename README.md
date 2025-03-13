@@ -68,3 +68,74 @@ The advertisement channels bulkmail, Facebook, Instagram, and Twitter show simil
 ![Product Name Legend](https://github.com/user-attachments/assets/3c7d9408-a6c9-40db-9a93-5a6d79beff60)
 
 The product breakdown graph shows that customers spent the most on alcohol across all countries and marital statuses. This trend holds true across education levels, except for those with a basic education. Customers with a basic education primarily focused on commodities. Furthermore, these customers have the lowest average in-store and online purchases, despite having the highest average number of website visits. This could be due to their lower income, which limits their purchasing power, even though they are actively browsing on the 2Market website. Additionally, they have the lowest average deal usage, suggesting that, despite their engagement, they are not capitalising on available promotions. To address this, a strategy could involve offering targeted promotions on commodities, which align with their primary focus and purchasing behaviour, making it easier for them to take advantage of discounts on essential products they are more likely to buy. 
+
+## Appendix
+-- Create a function to calculate average spend grouped by a specified column. <br>
+CREATE OR REPLACE FUNCTION average_spend_by(group_by_col TEXT) <br>
+RETURNS TABLE ( <br>
+    category TEXT, <br>
+    customer_count BIGINT, <br>
+    average_spend NUMERIC <br>
+) AS $$ <br>
+BEGIN <br>
+    RETURN QUERY EXECUTE format( <br>
+        'SELECT %I::TEXT AS category, <br>
+		        COUNT(id) AS customer_count, <br>
+                ROUND(AVG(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm)::NUMERIC, 2) AS average_spend <br>
+         FROM marketing_data <br>
+         GROUP BY %I <br>
+         ORDER BY average_spend DESC;', <br>
+         group_by_col, group_by_col <br>
+    ); <br>
+END; <br>
+$$ LANGUAGE plpgsql; <br>
+
+-- Apply the average_spend_by function to country. <br>
+SELECT * FROM average_spend_by('country'); <br>
+
+-- Apply the average_spend_by function to education. <br>
+SELECT * FROM average_spend_by('education'); <br>
+
+-- Apply the average_spend_by function to marital_status. <br>
+SELECT * FROM average_spend_by('marital_status'); <br>
+
+-- Create a function to retrieve advertisement effectiveness percentages grouped by a specified column. <br>
+CREATE OR REPLACE FUNCTION ad_effectiveness_by(group_by_col TEXT) <br>
+RETURNS TABLE ( <br>
+    category TEXT, <br>
+    customer_count BIGINT, <br>
+    total_effectiveness_percentage NUMERIC, <br>
+    brochure_effectiveness_percentage NUMERIC, <br>
+    bulkmail_effectiveness_percentage NUMERIC, <br>
+    facebook_effectiveness_percentage NUMERIC, <br>
+    instagram_effectiveness_percentage NUMERIC, <br>
+    twitter_effectiveness_percentage NUMERIC <br>
+) AS $$ <br>
+BEGIN <br>
+    RETURN QUERY EXECUTE format( <br>
+        'SELECT %I::TEXT AS category, <br>
+                COUNT(md.id) AS customer_count, <br>
+                ROUND((SUM(ad.brochure_ad) + SUM(ad.bulkmail_ad) + SUM(ad.facebook_ad) + <br>
+                SUM(ad.instagram_ad) + SUM(ad.twitter_ad)) * 100.0 / COUNT(md.id), 2) AS total_effectiveness_percentage, <br>
+                ROUND(SUM(ad.brochure_ad) * 100.0 / COUNT(md.id), 2) AS brochure_effectiveness_percentage, <br>
+                ROUND(SUM(ad.bulkmail_ad) * 100.0 / COUNT(md.id), 2) AS bulkmail_effectiveness_percentage, <br>
+                ROUND(SUM(ad.facebook_ad) * 100.0 / COUNT(md.id), 2) AS facebook_effectiveness_percentage, <br>
+                ROUND(SUM(ad.instagram_ad) * 100.0 / COUNT(md.id), 2) AS instagram_effectiveness_percentage, <br>
+                ROUND(SUM(ad.twitter_ad) * 100.0 / COUNT(md.id), 2) AS twitter_effectiveness_percentage <br>
+         FROM marketing_data md <br>
+         JOIN ad_data ad ON md.id = ad.id <br>
+         GROUP BY %I <br>
+         ORDER BY total_effectiveness_percentage DESC;', <br>
+         group_by_col, group_by_col <br>
+    ); <br>
+END; <br>
+$$ LANGUAGE plpgsql; <br>
+
+-- Apply the ad_effectiveness_by function to country. <br>
+SELECT * FROM ad_effectiveness_by('country'); <br>
+
+-- Apply the ad_effectiveness_by function to education. <br>
+SELECT * FROM ad_effectiveness_by('education'); <br>
+
+-- Apply the ad_effectiveness_by function to marital_status. <br>
+SELECT * FROM ad_effectiveness_by('marital_status'); <br>
