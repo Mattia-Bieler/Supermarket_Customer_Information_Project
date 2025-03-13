@@ -255,209 +255,238 @@ WHERE id NOT IN (SELECT id FROM marketing_data);
 
 /********************************************************************************/
 
--- Total spend per country.
-SELECT country, COUNT(id) AS customer_count,
-       SUM(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm) AS total_spend
-FROM marketing_data
-GROUP BY country
-ORDER BY total_spend DESC;
+-- Create a function to calculate total spend grouped by a specified column.
+CREATE OR REPLACE FUNCTION total_spend_by(group_by_col TEXT)
+RETURNS TABLE (
+    category TEXT,
+    customer_count BIGINT,
+    total_spend NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY EXECUTE format(
+        'SELECT %I::TEXT AS category, 
+		        COUNT(id) AS customer_count, 
+                SUM(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm)::NUMERIC AS total_spend 
+         FROM marketing_data 
+         GROUP BY %I 
+         ORDER BY total_spend DESC;',
+         group_by_col, group_by_col
+    );
+END;
+$$ LANGUAGE plpgsql;
 
--- Average spend per country.
-SELECT country, COUNT(id) AS customer_count,
-       ROUND(AVG(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm), 2) AS average_spend
-FROM marketing_data
-GROUP BY country
-ORDER BY average_spend DESC;
+-- Apply the total_spend_by function to country.
+SELECT * FROM total_spend_by('country');
 
--- Average spend per product per country.
-SELECT country, COUNT(id) AS customer_count,
-    ROUND(AVG(amtalco), 2) AS avg_amtalco,  
-    ROUND(AVG(amtvege), 2) AS avg_amtvege,   
-    ROUND(AVG(amtmeat), 2) AS avg_amtmeat,   
-    ROUND(AVG(amtfish), 2) AS avg_amtfish,  
-    ROUND(AVG(amtchoc), 2) AS avg_amtchoc,   
-    ROUND(AVG(amtcomm), 2) AS avg_amtcomm    
-FROM marketing_data 
-GROUP BY country   
-ORDER BY country;
+-- Apply the total_spend_by function to education.
+SELECT * FROM total_spend_by('education');
 
--- Total spend per marital status.
-SELECT marital_status, COUNT(id) AS customer_count,
-       SUM(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm) AS total_spend
-FROM marketing_data
-GROUP BY marital_status
-ORDER BY total_spend DESC;
+-- Apply the total_spend_by function to marital_status.
+SELECT * FROM total_spend_by('marital_status');
 
--- Average spend per marital status.
-SELECT marital_status, COUNT(id) AS customer_count,
-       ROUND(AVG(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm), 2) AS average_spend
-FROM marketing_data
-GROUP BY marital_status
-ORDER BY average_spend DESC;
+-- Create a function to calculate average spend grouped by a specified column.
+CREATE OR REPLACE FUNCTION average_spend_by(group_by_col TEXT)
+RETURNS TABLE (
+    category TEXT,
+    customer_count BIGINT,
+    average_spend NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY EXECUTE format(
+        'SELECT %I::TEXT AS category, 
+		        COUNT(id) AS customer_count, 
+                ROUND(AVG(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm)::NUMERIC, 2) AS average_spend 
+         FROM marketing_data 
+         GROUP BY %I 
+         ORDER BY average_spend DESC;',
+         group_by_col, group_by_col
+    );
+END;
+$$ LANGUAGE plpgsql;
 
--- Average spend per product per marital status.
-SELECT marital_status, COUNT(id) AS customer_count,
-    ROUND(AVG(amtalco), 2) AS avg_amtalco,  
-    ROUND(AVG(amtvege), 2) AS avg_amtvege,   
-    ROUND(AVG(amtmeat), 2) AS avg_amtmeat,   
-    ROUND(AVG(amtfish), 2) AS avg_amtfish,  
-    ROUND(AVG(amtchoc), 2) AS avg_amtchoc,   
-    ROUND(AVG(amtcomm), 2) AS avg_amtcomm    
-FROM marketing_data                          
-GROUP BY marital_status                               
-ORDER BY marital_status;
+-- Apply the average_spend_by function to country.
+SELECT * FROM average_spend_by('country');
 
--- Total spend per education.
-SELECT education, COUNT(id) AS customer_count,
-       SUM(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm) AS total_spend
-FROM marketing_data
-GROUP BY education
-ORDER BY total_spend DESC;
+-- Apply the average_spend_by function to education.
+SELECT * FROM average_spend_by('education');
 
--- Average spend per education.
-SELECT education, COUNT(id) AS customer_count,
-       ROUND(AVG(amtalco + amtvege + amtmeat + amtfish + amtchoc + amtcomm), 2) AS average_spend
-FROM marketing_data
-GROUP BY education
-ORDER BY average_spend DESC;
+-- Apply the average_spend_by function to marital_status.
+SELECT * FROM average_spend_by('marital_status');
 
--- Average spend per product per education.
-SELECT education, COUNT(id) AS customer_count,
-    ROUND(AVG(amtalco), 2) AS avg_amtalco,  
-    ROUND(AVG(amtvege), 2) AS avg_amtvege,   
-    ROUND(AVG(amtmeat), 2) AS avg_amtmeat,   
-    ROUND(AVG(amtfish), 2) AS avg_amtfish,  
-    ROUND(AVG(amtchoc), 2) AS avg_amtchoc,   
-    ROUND(AVG(amtcomm), 2) AS avg_amtcomm    
-FROM marketing_data                          
-GROUP BY education                               
-ORDER BY education;
+-- Create a function to calculate average spend per product grouped by a specified column.
+CREATE OR REPLACE FUNCTION average_spend_per_product_by(group_by_col TEXT)
+RETURNS TABLE (
+    category TEXT,
+    customer_count BIGINT,
+    avg_amtalco NUMERIC,
+    avg_amtvege NUMERIC,
+    avg_amtmeat NUMERIC,
+    avg_amtfish NUMERIC,
+    avg_amtchoc NUMERIC,
+    avg_amtcomm NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY EXECUTE format(
+        'SELECT %I::TEXT AS category, 
+		        COUNT(id) AS customer_count, 
+                ROUND(AVG(amtalco)::NUMERIC, 2) AS avg_amtalco,  
+                ROUND(AVG(amtvege)::NUMERIC, 2) AS avg_amtvege,   
+                ROUND(AVG(amtmeat)::NUMERIC, 2) AS avg_amtmeat,   
+                ROUND(AVG(amtfish)::NUMERIC, 2) AS avg_amtfish,  
+                ROUND(AVG(amtchoc)::NUMERIC, 2) AS avg_amtchoc,   
+                ROUND(AVG(amtcomm)::NUMERIC, 2) AS avg_amtcomm    
+         FROM marketing_data 
+         GROUP BY %I   
+         ORDER BY category;',
+         group_by_col, group_by_col
+    );
+END;
+$$ LANGUAGE plpgsql;
 
--- Average income per country.
-SELECT country, COUNT(id) AS customer_count,
-       ROUND(AVG(income_$), 2) AS average_income
-FROM marketing_data
-GROUP BY country
-ORDER BY average_income DESC;
+-- Apply the average_spend_per_product_by function to country.
+SELECT * FROM average_spend_per_product_by('country');
 
--- Top three incomes per country, ranked overall across all countries.
-WITH ranked_incomes AS (
-    SELECT country, 
-           income_$,
-           ROW_NUMBER() OVER (PARTITION BY country ORDER BY income_$ DESC) AS country_rank,
-           RANK() OVER (ORDER BY income_$ DESC) AS overall_rank
-    FROM marketing_data
-)
-SELECT country, 
-       income_$, 
-       overall_rank
-FROM ranked_incomes
-WHERE country_rank <= 3
-ORDER BY overall_rank;
+-- Apply the average_spend_per_product_by function to education.
+SELECT * FROM average_spend_per_product_by('education');
 
--- Average income per marital status.
-SELECT marital_status, COUNT(id) AS customer_count,
-       ROUND(AVG(income_$), 2) AS average_income
-FROM marketing_data
-GROUP BY marital_status
-ORDER BY average_income DESC;
+-- Apply the average_spend_per_product_by function to marital_status.
+SELECT * FROM average_spend_per_product_by('marital_status');
 
--- Top three incomes per marital status, ranked overall across the whole dataset.
-WITH ranked_incomes AS (
-    SELECT marital_status, 
-           income_$,
-           ROW_NUMBER() OVER (PARTITION BY marital_status ORDER BY income_$ DESC) AS marital_status_rank,
-           RANK() OVER (ORDER BY income_$ DESC) AS overall_rank
-    FROM marketing_data
-)
-SELECT marital_status, 
-       income_$, 
-       overall_rank
-FROM ranked_incomes
-WHERE marital_status_rank <= 3
-ORDER BY overall_rank;
+-- Create a function to calculate average income grouped by a specified column.
+CREATE OR REPLACE FUNCTION average_income_by(group_by_col TEXT)
+RETURNS TABLE (
+    category TEXT,
+    customer_count BIGINT,
+    average_income NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY EXECUTE format(
+        'SELECT %I::TEXT AS category, 
+		        COUNT(id) AS customer_count, 
+                ROUND(AVG(income_$)::NUMERIC, 2) AS average_income 
+         FROM marketing_data 
+         GROUP BY %I 
+         ORDER BY average_income DESC;',
+         group_by_col, group_by_col
+    );
+END;
+$$ LANGUAGE plpgsql;
 
--- Average income per education level.
-SELECT education, COUNT(id) AS customer_count,
-       ROUND(AVG(income_$), 2) AS average_income
-FROM marketing_data
-GROUP BY education
-ORDER BY average_income DESC;
+-- Apply the average_income_by function to country.
+SELECT * FROM average_income_by('country');
 
--- Top three incomes per education, ranked overall across the whole dataset.
-WITH ranked_incomes AS (
-    SELECT education, 
-           income_$,
-           ROW_NUMBER() OVER (PARTITION BY education ORDER BY income_$ DESC) AS education_rank,
-           RANK() OVER (ORDER BY income_$ DESC) AS overall_rank
-    FROM marketing_data
-)
-SELECT education, 
-       income_$, 
-       overall_rank
-FROM ranked_incomes
-WHERE education_rank <= 3
-ORDER BY overall_rank;
+-- Apply the average_income_by function to education.
+SELECT * FROM average_income_by('education');
 
--- Average number of deals, number of web visits, number of web purchases, 
--- and number of walkin purchases per country.
-SELECT country, COUNT(id) AS customer_count,
-       ROUND(AVG(numdeals), 2) AS avg_numdeals,
-       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
-       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
-       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
-FROM marketing_data
-GROUP BY country
-ORDER BY country;
+-- Apply the average_income_by function to marital_status.
+SELECT * FROM average_income_by('marital_status');
 
--- Average responses, complaints, and successful converstions per country.
-SELECT country, COUNT(id) AS customer_count,
-	ROUND(AVG(response), 2) AS avg_response,
-	ROUND(AVG(complain), 3) AS avg_complain,
-	ROUND(AVG(count_success), 2) AS avg_count_success
-FROM marketing_data
-GROUP BY country
-ORDER BY country;
+-- Create a function to retrieve the top three incomes grouped by a specified column, 
+-- ranked overall across all categories.
+CREATE OR REPLACE FUNCTION top_three_incomes_by(group_by_col TEXT)
+RETURNS TABLE (
+    category TEXT,
+    income NUMERIC,
+    overall_rank BIGINT
+) AS $$
+BEGIN
+    RETURN QUERY EXECUTE format(
+        'WITH ranked_incomes AS (
+            SELECT %I::TEXT AS category, 
+                   income_$::NUMERIC AS income,
+                   ROW_NUMBER() OVER (PARTITION BY %I ORDER BY income_$ DESC) AS category_rank,
+                   RANK() OVER (ORDER BY income_$ DESC) AS overall_rank
+            FROM marketing_data
+        )
+        SELECT category, 
+               income, 
+               overall_rank
+        FROM ranked_incomes
+        WHERE category_rank <= 3
+        ORDER BY overall_rank;',
+         group_by_col, group_by_col
+    );
+END;
+$$ LANGUAGE plpgsql;
 
--- Average number of deals, number of web visits, number of web purchases, 
--- and number of walk-in purchases per marital status.
-SELECT marital_status, COUNT(id) AS customer_count,
-       ROUND(AVG(numdeals), 2) AS avg_numdeals,
-       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
-       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
-       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
-FROM marketing_data
-GROUP BY marital_status
-ORDER BY marital_status;
+-- Apply the top_three_incomes_by function to country.
+SELECT * FROM top_three_incomes_by('country');
 
--- Average responses, complaints, and successful conversions per marital status.
-SELECT marital_status, COUNT(id) AS customer_count,
-       ROUND(AVG(response), 2) AS avg_response,
-       ROUND(AVG(complain), 3) AS avg_complain,
-       ROUND(AVG(count_success), 2) AS avg_count_success
-FROM marketing_data
-GROUP BY marital_status
-ORDER BY marital_status;
+-- Apply the top_three_incomes_by function to education.
+SELECT * FROM top_three_incomes_by('education');
 
--- Average number of deals, number of web visits, number of web purchases, 
--- and number of walk-in purchases per education.
-SELECT education, COUNT(id) AS customer_count,
-       ROUND(AVG(numdeals), 2) AS avg_numdeals,
-       ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
-       ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
-       ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
-FROM marketing_data
-GROUP BY education
-ORDER BY education;
+-- Apply the top_three_incomes_by function to marital_status.
+SELECT * FROM top_three_incomes_by('marital_status');
 
--- Average responses, complaints, and successful conversions per education.
-SELECT education, COUNT(id) AS customer_count,
-       ROUND(AVG(response), 2) AS avg_response,
-       ROUND(AVG(complain), 3) AS avg_complain,
-       ROUND(AVG(count_success), 2) AS avg_count_success
-FROM marketing_data
-GROUP BY education
-ORDER BY education;
+-- Create a function to retrieve the average number of deals, web visits, web purchases, 
+-- and walk-in purchases grouped by a specified column.
+CREATE OR REPLACE FUNCTION avg_transactions_by(group_by_col TEXT)
+RETURNS TABLE (
+    category TEXT,
+    customer_count BIGINT,
+    avg_numdeals NUMERIC,
+    avg_numwebvisits NUMERIC,
+    avg_numwebbuy NUMERIC,
+    avg_numwalkinbuy NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY EXECUTE format(
+        'SELECT %I::TEXT AS category, 
+                COUNT(id) AS customer_count,
+                ROUND(AVG(numdeals), 2) AS avg_numdeals,
+                ROUND(AVG(numwebvisits), 2) AS avg_numwebvisits,
+                ROUND(AVG(numwebbuy), 2) AS avg_numwebbuy,
+                ROUND(AVG(numwalkinbuy), 2) AS avg_numwalkinbuy
+         FROM marketing_data
+         GROUP BY %I
+         ORDER BY %I;',
+         group_by_col, group_by_col, group_by_col
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply the avg_transactions_by function to country.
+SELECT * FROM avg_transactions_by('country');
+
+-- Apply the avg_transactions_by function to education.
+SELECT * FROM avg_transactions_by('education');
+
+-- Apply the avg_transactions_by function to marital_status.
+SELECT * FROM avg_transactions_by('marital_status');
+
+-- Create a function to retrieve the average responses, complaints, and successful conversions, 
+-- grouped by a specified column.
+CREATE OR REPLACE FUNCTION avg_behaviour_by(group_by_col TEXT)
+RETURNS TABLE (
+    category TEXT,
+    customer_count BIGINT,
+    avg_response NUMERIC,
+    avg_complain NUMERIC,
+    avg_count_success NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY EXECUTE format(
+        'SELECT %I::TEXT AS category, 
+                COUNT(id) AS customer_count,
+                ROUND(AVG(response), 2) AS avg_response,
+                ROUND(AVG(complain), 3) AS avg_complain,
+                ROUND(AVG(count_success), 2) AS avg_count_success
+         FROM marketing_data
+         GROUP BY %I
+         ORDER BY %I;',
+         group_by_col, group_by_col, group_by_col
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply the avg_behaviour_by function to country.
+SELECT * FROM avg_behaviour_by('country');
+
+-- Apply the avg_behaviour_by function to education.
+SELECT * FROM avg_behaviour_by('education');
+
+-- Apply the avg_behaviour_by function to marital_status.
+SELECT * FROM avg_behaviour_by('marital_status');
 
 -- Total advertisement effectiveness percentage and the effectiveness percentage for each individual advertisement type.
 SELECT 
@@ -470,53 +499,43 @@ SELECT
     ROUND((SUM(twitter_ad) * 100.0) / COUNT(id), 2) AS twitter_ad_effectiveness_percentage
 FROM ad_data;
 
--- Advertisement effectiveness percentage per country with total effectiveness percentage.
-SELECT md.country, COUNT(md.id) AS customer_count,
-    ROUND(
-        (SUM(ad.brochure_ad) + SUM(ad.bulkmail_ad) + SUM(ad.facebook_ad) + 
-        SUM(ad.instagram_ad) + SUM(ad.twitter_ad)) * 100.0 / COUNT(md.id), 2
-    ) AS total_effectiveness_percentage, 
-    ROUND(SUM(ad.brochure_ad) * 100.0 / COUNT(md.id), 2) AS brochure_effectiveness_percentage,
-    ROUND(SUM(ad.bulkmail_ad) * 100.0 / COUNT(md.id), 2) AS bulkmail_effectiveness_percentage,
-    ROUND(SUM(ad.facebook_ad) * 100.0 / COUNT(md.id), 2) AS facebook_effectiveness_percentage,
-    ROUND(SUM(ad.instagram_ad) * 100.0 / COUNT(md.id), 2) AS instagram_effectiveness_percentage,
-    ROUND(SUM(ad.twitter_ad) * 100.0 / COUNT(md.id), 2) AS twitter_effectiveness_percentage
-FROM marketing_data md
-JOIN ad_data ad 
-    ON md.id = ad.id
-GROUP BY md.country
-ORDER BY total_effectiveness_percentage DESC;
+-- Create a function to retrieve advertisement effectiveness percentages grouped by a specified column.
+CREATE OR REPLACE FUNCTION ad_effectiveness_by(group_by_col TEXT)
+RETURNS TABLE (
+    category TEXT,
+    customer_count BIGINT,
+    total_effectiveness_percentage NUMERIC,
+    brochure_effectiveness_percentage NUMERIC,
+    bulkmail_effectiveness_percentage NUMERIC,
+    facebook_effectiveness_percentage NUMERIC,
+    instagram_effectiveness_percentage NUMERIC,
+    twitter_effectiveness_percentage NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY EXECUTE format(
+        'SELECT %I::TEXT AS category, 
+                COUNT(md.id) AS customer_count,
+                ROUND((SUM(ad.brochure_ad) + SUM(ad.bulkmail_ad) + SUM(ad.facebook_ad) + 
+                SUM(ad.instagram_ad) + SUM(ad.twitter_ad)) * 100.0 / COUNT(md.id), 2) AS total_effectiveness_percentage, 
+                ROUND(SUM(ad.brochure_ad) * 100.0 / COUNT(md.id), 2) AS brochure_effectiveness_percentage,
+                ROUND(SUM(ad.bulkmail_ad) * 100.0 / COUNT(md.id), 2) AS bulkmail_effectiveness_percentage,
+                ROUND(SUM(ad.facebook_ad) * 100.0 / COUNT(md.id), 2) AS facebook_effectiveness_percentage,
+                ROUND(SUM(ad.instagram_ad) * 100.0 / COUNT(md.id), 2) AS instagram_effectiveness_percentage,
+                ROUND(SUM(ad.twitter_ad) * 100.0 / COUNT(md.id), 2) AS twitter_effectiveness_percentage
+         FROM marketing_data md
+         JOIN ad_data ad ON md.id = ad.id
+         GROUP BY %I
+         ORDER BY total_effectiveness_percentage DESC;',
+         group_by_col, group_by_col
+    );
+END;
+$$ LANGUAGE plpgsql;
 
--- Advertisement effectiveness percentage per marital status with total effectiveness percentage.
-SELECT md.marital_status, COUNT(md.id) AS customer_count,
-    ROUND(
-        (SUM(ad.brochure_ad) + SUM(ad.bulkmail_ad) + SUM(ad.facebook_ad) + 
-        SUM(ad.instagram_ad) + SUM(ad.twitter_ad)) * 100.0 / COUNT(md.id), 2
-    ) AS total_effectiveness_percentage, 
-    ROUND(SUM(ad.brochure_ad) * 100.0 / COUNT(md.id), 2) AS brochure_effectiveness_percentage,
-    ROUND(SUM(ad.bulkmail_ad) * 100.0 / COUNT(md.id), 2) AS bulkmail_effectiveness_percentage,
-    ROUND(SUM(ad.facebook_ad) * 100.0 / COUNT(md.id), 2) AS facebook_effectiveness_percentage,
-    ROUND(SUM(ad.instagram_ad) * 100.0 / COUNT(md.id), 2) AS instagram_effectiveness_percentage,
-    ROUND(SUM(ad.twitter_ad) * 100.0 / COUNT(md.id), 2) AS twitter_effectiveness_percentage
-FROM marketing_data md
-JOIN ad_data ad 
-    ON md.id = ad.id
-GROUP BY md.marital_status
-ORDER BY total_effectiveness_percentage DESC;
+-- Apply the ad_effectiveness_by function to country.
+SELECT * FROM ad_effectiveness_by('country');
 
--- Advertisement effectiveness percentage per education with total effectiveness percentage.
-SELECT md.education, COUNT(md.id) AS customer_count,
-    ROUND(
-        (SUM(ad.brochure_ad) + SUM(ad.bulkmail_ad) + SUM(ad.facebook_ad) + 
-        SUM(ad.instagram_ad) + SUM(ad.twitter_ad)) * 100.0 / COUNT(md.id), 2
-    ) AS total_effectiveness_percentage, 
-    ROUND(SUM(ad.brochure_ad) * 100.0 / COUNT(md.id), 2) AS brochure_effectiveness_percentage,
-    ROUND(SUM(ad.bulkmail_ad) * 100.0 / COUNT(md.id), 2) AS bulkmail_effectiveness_percentage,
-    ROUND(SUM(ad.facebook_ad) * 100.0 / COUNT(md.id), 2) AS facebook_effectiveness_percentage,
-    ROUND(SUM(ad.instagram_ad) * 100.0 / COUNT(md.id), 2) AS instagram_effectiveness_percentage,
-    ROUND(SUM(ad.twitter_ad) * 100.0 / COUNT(md.id), 2) AS twitter_effectiveness_percentage
-FROM marketing_data md
-JOIN ad_data ad 
-    ON md.id = ad.id
-GROUP BY md.education
-ORDER BY total_effectiveness_percentage DESC;
+-- Apply the ad_effectiveness_by function to education.
+SELECT * FROM ad_effectiveness_by('education');
+
+-- Apply the ad_effectiveness_by function to marital_status.
+SELECT * FROM ad_effectiveness_by('marital_status');
