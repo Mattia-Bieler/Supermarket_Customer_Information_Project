@@ -2,6 +2,9 @@
 -- Used Text to Column twice for Dt_Customer to handle the difference in date formats (DMY and MDY).
 -- Changed the date format to YYYY-MM-DD to import file into pgAdmin4.
 
+/********************************************************************************
+Data Preparation: marketing_data.csv
+********************************************************************************/
 -- Create a 'marketing_data' table to store customer information.
 CREATE TABLE marketing_data (
     id SERIAL PRIMARY KEY,
@@ -217,7 +220,9 @@ LIMIT 15;
 DELETE FROM marketing_data
 WHERE id = 9432;
 
-/********************************************************************************/
+/********************************************************************************
+Data Preparation: ad_data.csv
+********************************************************************************/
 
 -- Create an 'ad_data' table to store advertisment information.
 CREATE TABLE ad_data (
@@ -253,7 +258,9 @@ WHERE id NOT IN (SELECT id FROM ad_data);
 DELETE FROM ad_data
 WHERE id NOT IN (SELECT id FROM marketing_data);
 
-/********************************************************************************/
+/********************************************************************************
+Analysis
+********************************************************************************/
 
 -- Create a function to calculate total spend grouped by a specified column.
 CREATE OR REPLACE FUNCTION total_spend_by(group_by_col TEXT)
