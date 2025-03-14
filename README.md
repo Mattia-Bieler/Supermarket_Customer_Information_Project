@@ -13,7 +13,7 @@ An age column was added, calculated as 2025 - year_birth, to simplify demographi
 
 The ad_data table was created to store advertisement-related information, and consistency checks between the marketing_data and ad_data tables were performed. I first verified that no duplicate id’s or NULL values existed in the ad_data dataset. Mismatched id entries in ad_data that did not exist in marketing_data were then identified and removed, ensuring alignment and maintaining data integrity for analysis. 
 
-To facilitate the analysis using PostgreSQL, several functions were developed to assess the customer demographic groups (country, education, and marital status). Two examples include the average_spend_by and ad_effectiveness_by functions. After completing the analysis, both tables were exported as ad_data_cleaned.csv and marketing_data_cleaned.csv for import into Tableau.
+To facilitate the analysis, functions were developed to assess customer demographic groups (country, education, and marital status) where appropriate, optimising query performance and simplifying data processing. After completing the analysis, both tables were exported as ad_data_cleaned.csv and marketing_data_cleaned.csv for import into Tableau.
 
 ## Dashboard: Design and Development
 [__VIEW DASHBOARD ON TABLEAU PUBLIC__](https://public.tableau.com/app/profile/mattia.bieler/viz/2MarketSupermarketDashboard/2MarketInformation1)
